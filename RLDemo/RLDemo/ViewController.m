@@ -21,10 +21,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     // 添加主线程runloop监听者
-//    [self addMainObserver];
+    [self addMainObserver];
     
     // 添加子线程runloop监听者
-    [self addOtherObserver];
+//    [self addOtherObserver];
     
     // 此处使用sleep是为了避免使用timer造成runloop的timer事件的干扰。
     sleep(3);
@@ -88,6 +88,7 @@
 {
     CFRunLoopObserverRef observer = CFRunLoopObserverCreateWithHandler(kCFAllocatorDefault, kCFRunLoopAllActivities, YES, 0, ^(CFRunLoopObserverRef observer, CFRunLoopActivity activity) {
         
+        NSLog(@"currentMode---------->%@",[NSRunLoop currentRunLoop].currentMode);
         switch (activity) {
                 
             case kCFRunLoopEntry:
@@ -118,8 +119,7 @@
                 break;
         }
     });
-    
-    CFRunLoopAddObserver(CFRunLoopGetCurrent(), observer, kCFRunLoopDefaultMode);
+    CFRunLoopAddObserver(CFRunLoopGetCurrent(), observer, kCFRunLoopCommonModes);
     self.timer1 = [NSTimer scheduledTimerWithTimeInterval:3 repeats:NO block:^(NSTimer * _Nonnull timer) {
         NSLog(@"###cmm###timer时间到");
     }];
